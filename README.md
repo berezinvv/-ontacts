@@ -5,3 +5,9 @@
 -Spring boot
 -PostgreSQL
 -REST
+
+
+CREATE TABLE contacts (
+	id int8 PRIMARY KEY,
+	"name" varchar(255)
+)
