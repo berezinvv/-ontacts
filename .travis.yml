@@ -1,6 +1,7 @@
 language: java
+jdk: oraclejdk8
 
-script: mvn clean install
+script: mvn clean install -B
 
 services:
   - postgresql
