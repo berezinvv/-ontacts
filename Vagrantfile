@@ -1,6 +1,5 @@
-box      = 'phusion/ubuntu-14.04-amd64'
-version  = 2
-
-Vagrant.configure(version) do |config|
-    config.vm.box = box
+Vagrant.configure("2") do |config|
+  config.vm.box = "hashicorp/precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 end
+
