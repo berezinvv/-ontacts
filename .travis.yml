@@ -1,7 +1,7 @@
 language: java
 jdk: oraclejdk8
 
-script: mvn spring-boot:run
+script: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 services:
   - postgresql
