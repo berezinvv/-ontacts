@@ -6,9 +6,10 @@ import com.contacts.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,20 +21,20 @@ public class WebController {
     ContactRepository contactRepository;
 
     @RequestMapping("/save")
-    public  ResponseEntity<String> save() {
-        // save a single Contact
-        contactRepository.save(new Contact("Jack"));
-        contactRepository.save(new Contact("Smith"));
-        contactRepository.save(new Contact("Adam"));
-        contactRepository.save(new Contact("Johnson"));
-        contactRepository.save(new Contact("Kim"));
-        contactRepository.save(new Contact("Smith"));
-        contactRepository.save(new Contact("David"));
-        contactRepository.save(new Contact("Williams"));
-        contactRepository.save(new Contact("Peter"));
-        contactRepository.save(new Contact("Davis"));
+    public ResponseEntity<String> save() {
+        // save
+        contactRepository.save(new Contact(1, "Jack"));
+        contactRepository.save(new Contact(2, "Smith"));
+        contactRepository.save(new Contact(3, "Adam"));
+        contactRepository.save(new Contact(4, "Johnson"));
+        contactRepository.save(new Contact(5, "Kim"));
+        contactRepository.save(new Contact(6, "Smith"));
+        contactRepository.save(new Contact(7, "David"));
+        contactRepository.save(new Contact(8, "Williams"));
+        contactRepository.save(new Contact(9, "Peter"));
+        contactRepository.save(new Contact(10, "Davis"));
 
-        return  new ResponseEntity<String>("Done", HttpStatus.CREATED);
+        return new ResponseEntity<String>("Done", HttpStatus.CREATED);
     }
 
     @RequestMapping("/contacts")
@@ -41,7 +42,7 @@ public class WebController {
 
         ContactJSON contactJSON = new ContactJSON();
 
-        if (nameFilter.isEmpty()){
+        if (nameFilter.isEmpty()) {
             return new ResponseEntity<ContactJSON>(contactJSON, HttpStatus.BAD_REQUEST);
         }
 
@@ -49,7 +50,7 @@ public class WebController {
 
         contactJSON.setContacts(contactList.stream().filter(contact -> !contact.getName().matches(nameFilter)).collect(Collectors.toList()));
 
-        if (!nameFilter.isEmpty() && contactJSON.getContacts().size() == 0){
+        if (!nameFilter.isEmpty() && contactJSON.getContacts().size() == 0) {
             return new ResponseEntity<ContactJSON>(contactJSON, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<ContactJSON>(contactJSON, HttpStatus.OK);

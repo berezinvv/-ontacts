@@ -17,11 +17,20 @@ public class Contact {
         this.name = name;
     }
 
+    public Contact(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Contact() {
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
