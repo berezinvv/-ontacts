@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/hello")
@@ -46,13 +45,10 @@ public class WebController {
             return new ResponseEntity<ContactJSON>(contactJSON, HttpStatus.BAD_REQUEST);
         }
 
-        List<Contact> contactList = contactRepository.findAll();
+        List<Contact> contactList = contactRepository.findByNameFilter(nameFilter);
 
-        contactJSON.setContacts(contactList.stream().filter(contact -> !contact.getName().matches(nameFilter)).collect(Collectors.toList()));
+        contactJSON.setContacts(contactList);
 
-        if (!nameFilter.isEmpty() && contactJSON.getContacts().size() == 0) {
-            return new ResponseEntity<ContactJSON>(contactJSON, HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<ContactJSON>(contactJSON, HttpStatus.OK);
     }
 }
