@@ -1,28 +1,38 @@
 package com.contacts;
 
+import com.contacts.controller.WebController;
 import com.contacts.entity.Contact;
 import com.contacts.repository.ContactRepository;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
+@AutoConfigureMockMvc
 public class ApplicationTest {
 
     public static final String REST_SERVICE_URI = "http://localhost:8080/hello";
@@ -36,6 +46,22 @@ public class ApplicationTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetContactsNameFilterBadRequest() throws Exception {
+        mvc.perform(get("/hello/contacts?nameFilter="))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+    }
+
+    @Test
+    public void testGetContactsNameFilter() throws Exception {
+        mvc.perform(get("/hello/contacts?nameFilter=^A.*$"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
     }
 
     @Test
@@ -59,25 +85,25 @@ public class ApplicationTest {
         assertEquals("Jack", result.getName());
     }
 
-    @Test
-    public void testingStatusCode_Save201CREATED() throws IOException {
-
-//        HttpUriRequest request = new HttpGet(REST_SERVICE_URI + "/save");
+//    @Test
+//    public void testingStatusCode_Save201CREATED() throws IOException {
 //
-//        HttpResponse httpResponse = (HttpResponse) HttpClientBuilder.create().build().execute(request);
+////        HttpUriRequest request = new HttpGet(REST_SERVICE_URI + "/save");
+////
+////        HttpResponse httpResponse = (HttpResponse) HttpClientBuilder.create().build().execute(request);
+////
+////        assertThat(httpResponse.getStatusLine().getStatusCode(),
+////                equalTo(201));
+//    }
 //
-//        assertThat(httpResponse.getStatusLine().getStatusCode(),
-//                equalTo(201));
-    }
-
-    @Test
-    public void testingStatusCode_Contacts400BAD_REQUEST() throws IOException {
-
-//        HttpUriRequest request = new HttpGet(REST_SERVICE_URI + "/contacts?nameFilter=");
+//    @Test
+//    public void testingStatusCode_Contacts400BAD_REQUEST() throws IOException {
 //
-//        HttpResponse httpResponse = (HttpResponse) HttpClientBuilder.create().build().execute(request);
-//
-//        assertThat(httpResponse.getStatusLine().getStatusCode(),
-//                equalTo(400));
-    }
+////        HttpUriRequest request = new HttpGet(REST_SERVICE_URI + "/contacts?nameFilter=");
+////
+////        HttpResponse httpResponse = (HttpResponse) HttpClientBuilder.create().build().execute(request);
+////
+////        assertThat(httpResponse.getStatusLine().getStatusCode(),
+////                equalTo(400));
+//    }
 }
