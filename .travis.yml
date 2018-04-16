@@ -3,7 +3,6 @@ jdk: oraclejdk8
 
 script:
     mvn test -B
-    mvn install 
 
 services:
   - postgresql
